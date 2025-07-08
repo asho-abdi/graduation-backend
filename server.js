@@ -22,8 +22,10 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+// Replace your existing CORS setup with this:
+app.use(cors({ origin: true, credentials: true }));
+app.options('*', cors({ origin: true, credentials: true }));
+
 
 app.use(express.json());
 
