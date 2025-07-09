@@ -33,9 +33,16 @@ app.use('/api/admin',      require('./routes/adminRoutes'));
 app.use('/api/departments', require('./routes/departmentRoutes'));
 
 // ✅ Root health check
+// ✅ Root health check
 app.get('/', (req, res) => {
   res.send('Graduation Management System API Running');
 });
+
+// ✅ API base check
+app.get('/api', (req, res) => {
+  res.send('Graduation Management System API Root');
+});
+
 
 // ✅ Start server
 const PORT = process.env.PORT || 5000;
