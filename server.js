@@ -12,14 +12,10 @@ const cors = require('cors');
 
 const allowedOrigins = ['https://graduation12.com'];
 
+const cors = require('cors');
+
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: 'https://graduation12.com',
   credentials: true,
 }));
 
