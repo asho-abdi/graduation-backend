@@ -8,10 +8,21 @@ connectDB();
 const app = express();
 
 // ✅ Allow CORS from frontend
+const cors = require('cors');
+
+const allowedOrigins = ['https://graduation12.com'];
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'https://graduation12.com',
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 }));
+
 
 // ✅ Parse JSON
 app.use(express.json());
