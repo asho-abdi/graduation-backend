@@ -1,21 +1,18 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-
 const connectDB = require('./config/db');
+
 connectDB();
 
 const app = express();
 
-// ✅ Allow CORS from frontend
-
+// ✅ Enable CORS for frontend domain
 app.use(cors({
-  origin: 'https://graduation12.com',
+  origin: process.env.CLIENT_URL, // ← comes from Render .env
   credentials: true,
 }));
 
-
-// ✅ Parse JSON
 app.use(express.json());
 
 // ✅ Mount Routes
@@ -26,8 +23,8 @@ app.use('/api/admin', require('./routes/adminRoutes'));
 app.use('/api/departments', require('./routes/departmentRoutes'));
 
 // ✅ Health check
-app.get('/', (req, res) => {
-  res.send('API is running');
+app.get('/health', (req, res) => {
+  res.json({ status: 'Backend running ✅' });
 });
 
 const PORT = process.env.PORT || 5000;
