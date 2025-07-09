@@ -10,24 +10,25 @@ const app = express();
 // ✅ Confirm CLIENT_URL is loaded
 console.log('CLIENT_URL =', process.env.CLIENT_URL);
 
-// ✅ Log every incoming request origin
+// ✅ Log every incoming request origin (optional for debugging)
 app.use((req, res, next) => {
   console.log('Incoming Origin:', req.headers.origin);
   next();
 });
 
-// ✅ Enable CORS for your frontend domain
+// ✅ Enable CORS for specific domain
+const allowedOrigins = ['https://graduation12.com'];
+
 app.use(cors({
-  origin: 'https://graduation12.com', // your frontend domain
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 }));
-
-// ✅ Allow preflight requests for all routes
-app.options('*', cors({
-  origin: 'https://graduation12.com',
-  credentials: true
-}));
-
 
 // ✅ Parse JSON requests
 app.use(express.json());
@@ -39,17 +40,13 @@ app.use('/api/supervisor', require('./routes/supervisorRoutes'));
 app.use('/api/admin',      require('./routes/adminRoutes'));
 app.use('/api/departments', require('./routes/departmentRoutes'));
 
-// ✅ Root health check
-// ✅ Root health check
+// ✅ Health check routes
 app.get('/', (req, res) => {
   res.send('Graduation Management System API Running');
 });
-
-// ✅ API base check
 app.get('/api', (req, res) => {
   res.send('Graduation Management System API Root');
 });
-
 
 // ✅ Start server
 const PORT = process.env.PORT || 5000;
