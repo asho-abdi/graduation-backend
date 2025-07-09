@@ -1,40 +1,43 @@
 require('dotenv').config();
-const express   = require('express');
-const cors      = require('cors');
-const connectDB = require('./config/db');
+const express = require('express');
+const cors = require('cors');  // ✅ Declare once
 
+const connectDB = require('./config/db');
 connectDB();
+
 const app = express();
 
-// 1️⃣ Check that CLIENT_URL is set
+// ✅ Confirm CLIENT_URL is loaded
 console.log('CLIENT_URL =', process.env.CLIENT_URL);
 
-// 2️⃣ Log every incoming Origin
+// ✅ Log every incoming request origin
 app.use((req, res, next) => {
   console.log('Incoming Origin:', req.headers.origin);
   next();
 });
 
-// 3️⃣ TEMP: Allow all origins (for testing only!)
-app.use(cors({ origin: true, credentials: true }));
-app.options('*', cors({ origin: true, credentials: true }));
-console.log('🔥 CORS is now allowing all origins (temporary) 🔥');
+// ✅ Enable CORS for your frontend domain
+app.use(cors({
+  origin: 'https://graduation12.com', // your frontend domain
+  credentials: true,
+}));
 
+// ✅ Parse JSON requests
 app.use(express.json());
 
-// ————————————————————————————————
-// Your route mounts
-// ————————————————————————————————
+// ✅ Mount your routes
 app.use('/api/auth',       require('./routes/authRoutes'));
 app.use('/api/student',    require('./routes/studentRoutes'));
 app.use('/api/supervisor', require('./routes/supervisorRoutes'));
 app.use('/api/admin',      require('./routes/adminRoutes'));
-app.use('/api',            require('./routes/departmentRoutes'));
+app.use('/api/departments', require('./routes/departmentRoutes'));
 
+// ✅ Root health check
 app.get('/', (req, res) => {
   res.send('Graduation Management System API Running');
 });
 
+// ✅ Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);

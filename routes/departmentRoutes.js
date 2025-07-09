@@ -3,6 +3,6 @@ const router = express.Router();
 const { createDepartment } = require('../controllers/departmentController');
 
 // POST /api/departments
-router.post('/departments', createDepartment);
+router.post('/', createDepartment);
 
 module.exports = router;
