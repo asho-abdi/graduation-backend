@@ -22,6 +22,13 @@ app.use(cors({
   credentials: true,
 }));
 
+// ✅ Allow preflight requests for all routes
+app.options('*', cors({
+  origin: 'https://graduation12.com',
+  credentials: true
+}));
+
+
 // ✅ Parse JSON requests
 app.use(express.json());
 
